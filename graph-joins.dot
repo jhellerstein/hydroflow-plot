@@ -1,0 +1,86 @@
+digraph {
+    subgraph "cluster n1v1" {
+        fillcolor="#dddddd"
+        style=filled
+        label = "sg_1v1\nstratum 0"
+        n5v1 [label="(n5v1) join :: < 'static, 'static > ()", fontname=Monaco, shape=invhouse, style = filled, color = "#0022ff", fontcolor = "#ffffff"]
+        n6v1 [label="(n6v1) for_each(| (k, (v1, v2)) | println!\l(\"symmetric join: ({}, ({}, {}))\", k, v1, v2))\l", fontname=Monaco, shape=house, style = filled, color = "#ffff00"]
+        n5v1 -> n6v1
+    }
+    subgraph "cluster n2v1" {
+        fillcolor="#dddddd"
+        style=filled
+        label = "sg_2v1\nstratum 1"
+        n10v1 [label="(n10v1) group_by :: < 'static, (usize, char), usize >\l(| | 0, | old : & mut usize, _new : usize | * old)\l", fontname=Monaco, shape=invhouse, style = filled, color = "#0022ff", fontcolor = "#ffffff"]
+        n11v1 [label="(n11v1) map(| (k, _v) : ((usize, char), _) | k)", fontname=Monaco, shape=invhouse, style = filled, color = "#0022ff", fontcolor = "#ffffff"]
+        n13v1 [label="(n13v1) group_by :: < 'static, (usize, char), usize >\l(| | 0, | old : & mut usize, _new : usize | * old)\l", fontname=Monaco, shape=invhouse, style = filled, color = "#0022ff", fontcolor = "#ffffff"]
+        n14v1 [label="(n14v1) map(| (k, _v) : ((usize, char), _) | k)", fontname=Monaco, shape=invhouse, style = filled, color = "#0022ff", fontcolor = "#ffffff"]
+        n7v1 [label="(n7v1) join :: < 'tick, 'tick > ()", fontname=Monaco, shape=invhouse, style = filled, color = "#0022ff", fontcolor = "#ffffff"]
+        n8v1 [label="(n8v1) for_each(| (k, (v1, v2)) | println!\l(\"gb-streamjoin: ({}, ({}, {}))\", k, v1, v2))\l", fontname=Monaco, shape=house, style = filled, color = "#ffff00"]
+        n10v1 -> n11v1
+        n11v1 -> n7v1 [label="0"]
+        n13v1 -> n14v1
+        n14v1 -> n7v1 [label="1"]
+        n7v1 -> n8v1
+    }
+    subgraph "cluster n3v1" {
+        fillcolor="#dddddd"
+        style=filled
+        label = "sg_3v1\nstratum 0"
+        n1v1 [label="(n1v1) source_stream(left_recv)", fontname=Monaco, shape=invhouse, style = filled, color = "#0022ff", fontcolor = "#ffffff"]
+        n2v1 [label="(n2v1) tee()", fontname=Monaco, shape=house, style = filled, color = "#ffff00"]
+        n9v1 [label="(n9v1) map(| (k, v) | ((k, v), 0))", fontname=Monaco, shape=house, style = filled, color = "#ffff00"]
+        n1v1 -> n2v1
+        n2v1 -> n9v1
+    }
+    subgraph "cluster n4v1" {
+        fillcolor="#dddddd"
+        style=filled
+        label = "sg_4v1\nstratum 0"
+        n3v1 [label="(n3v1) source_stream(right_recv)", fontname=Monaco, shape=invhouse, style = filled, color = "#0022ff", fontcolor = "#ffffff"]
+        n4v1 [label="(n4v1) tee()", fontname=Monaco, shape=house, style = filled, color = "#ffff00"]
+        n12v1 [label="(n12v1) map(| (k, v) | ((k, v), 0))", fontname=Monaco, shape=house, style = filled, color = "#ffff00"]
+        n3v1 -> n4v1
+        n4v1 -> n12v1
+    }
+    subgraph "cluster n5v1" {
+        fillcolor="#dddddd"
+        style=filled
+        label = "sg_5v1\nstratum 0"
+        n15v1 [label="(n15v1) join :: < 'tick, 'static > ()", fontname=Monaco, shape=invhouse, style = filled, color = "#0022ff", fontcolor = "#ffffff"]
+        n16v1 [label="(n16v1) for_each(| (k, (v1, v2)) | println!\l(\"stream-table join: ({}, ({}, {}))\", k, v1, v2))\l", fontname=Monaco, shape=house, style = filled, color = "#ffff00"]
+        n15v1 -> n16v1
+    }
+    subgraph "cluster n6v1" {
+        fillcolor="#dddddd"
+        style=filled
+        label = "sg_6v1\nstratum 0"
+        n17v1 [label="(n17v1) join :: < 'static, 'tick > ()", fontname=Monaco, shape=invhouse, style = filled, color = "#0022ff", fontcolor = "#ffffff"]
+        n18v1 [label="(n18v1) for_each(| (k, (v1, v2)) | println!\l(\"table-stream join: ({}, ({}, {}))\", k, v1, v2))\l", fontname=Monaco, shape=house, style = filled, color = "#ffff00"]
+        n17v1 -> n18v1
+    }
+    n2v1 -> n19v1
+    n2v1 -> n23v1
+    n2v1 -> n25v1
+    n4v1 -> n20v1
+    n4v1 -> n24v1
+    n4v1 -> n26v1
+    n9v1 -> n21v1
+    n12v1 -> n22v1
+    n19v1 [label="(n19v1) handoff", fontname=Monaco, shape=parallelogram, style = filled, color = "#ddddff"]
+    n19v1 -> n5v1 [label="0"]
+    n20v1 [label="(n20v1) handoff", fontname=Monaco, shape=parallelogram, style = filled, color = "#ddddff"]
+    n20v1 -> n5v1 [label="1"]
+    n21v1 [label="(n21v1) handoff", fontname=Monaco, shape=parallelogram, style = filled, color = "#ddddff"]
+    n21v1 -> n10v1 [arrowhead=box, color=red]
+    n22v1 [label="(n22v1) handoff", fontname=Monaco, shape=parallelogram, style = filled, color = "#ddddff"]
+    n22v1 -> n13v1 [arrowhead=box, color=red]
+    n23v1 [label="(n23v1) handoff", fontname=Monaco, shape=parallelogram, style = filled, color = "#ddddff"]
+    n23v1 -> n15v1 [label="0"]
+    n24v1 [label="(n24v1) handoff", fontname=Monaco, shape=parallelogram, style = filled, color = "#ddddff"]
+    n24v1 -> n15v1 [label="1"]
+    n25v1 [label="(n25v1) handoff", fontname=Monaco, shape=parallelogram, style = filled, color = "#ddddff"]
+    n25v1 -> n17v1 [label="0"]
+    n26v1 [label="(n26v1) handoff", fontname=Monaco, shape=parallelogram, style = filled, color = "#ddddff"]
+    n26v1 -> n17v1 [label="1"]
+    }
