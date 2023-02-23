@@ -19,9 +19,4 @@ Example:
 % dot -Tpdf taint.dot > taint.pdf
 % open taint.pdf
 ```
-I also recomment the [VScode extension for Graphviz](Name: Graphviz (dot) language support for Visual Studio Code
-Id: joaompinto.vscode-graphviz
-Description: This extension provides GraphViz (dot) language support for Visual Studio Code
-Version: 0.0.6
-Publisher: João Pinto
-VS Marketplace Link: https://marketplace.visualstudio.com/items?itemName=joaompinto.vscode-graphviz) to save the trouble of running dot and generating pdfs.
+I also recomment the [VScode extension for Graphviz](https://marketplace.visualstudio.com/items?itemName=joaompinto.vscode-graphviz) to save the trouble of running dot and generating pdfs.
